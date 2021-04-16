@@ -1,0 +1,20 @@
+WinMain running
+Checking parameters
+Calling game_preload
+Initializing engine
+Screen size: 800, 600
+Creating program window
+Creating Direct3D object
+Creating Direct3D device
+Hardware vertex processing
+Creating 2D renderer
+Init input system
+Calling game_init(00000000000D095E)
+Init Game Code
+Engine init succeeded
+Core timer started: 3.94741e+06
+Entering while loop
+Exiting while loop
+Total run time: 4.22572e+06
+Freeing game resources
+Shutting down engine
