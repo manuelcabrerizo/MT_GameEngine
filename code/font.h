@@ -4,6 +4,7 @@
 
 namespace Octane
 {
+    class Color;
     class Font
     {
     private:
@@ -11,7 +12,7 @@ namespace Octane
     public:
         Font(std::string name, int size);
         ~Font();
-        void print(int x, int y, std::string text, D3DCOLOR color = 0xffffffff);
+        void print(int x, int y, std::string text,  Color color);
         int get_text_width(std::string text);
         int get_text_height(std::string text);
     }; 

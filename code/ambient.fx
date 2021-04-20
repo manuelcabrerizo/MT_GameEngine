@@ -3,41 +3,58 @@
 float4x4 World;
 float4x4 View;
 float4x4 Projection;
-float4 AmbientColor : AMBIENT = float4(1.0, 1.0, 1.0, 1.0);
-float AmbientIntensity = 1.0;
+float4x4 WorldInverseTranspose;
 
-struct MyVertexStruct
+float3 LightVector = float3(1, 0, 0);
+float4 LightColor = float4(1, 1, 1, 1);
+float  LightPower = 0.6;
+
+
+struct MyVertexInput
 {
-    float4 position : POSITION0;
+    float4 position : POSITION;
+    float2 texcoord : TEXCOORD0;
+    float4 normal   : NORMAL;
+};
+
+struct MyVertexOutput
+{
+    float4 position : POSITION;
+    float2 texcoord : TEXCOORD0;
     float4 color    : COLOR0;
 };
 
-MyVertexStruct VertexShaderFunction(MyVertexStruct input_param)
+MyVertexOutput VertexShaderFunction(MyVertexInput input_param)
 {
-    MyVertexStruct output = (MyVertexStruct)0;
+    MyVertexOutput output = (MyVertexOutput)0;
 
     //combine world + view + projection Matrices
     float4x4 worldViewProj = mul(World, mul(View, Projection));
 
     // translate the current vertex
     output.position = mul(input_param.position, worldViewProj);
-    output.color.rgb = AmbientColor * AmbientIntensity;
-    output.color.a = AmbientColor.a;
+
+    float4 normal = mul(input_param.normal, WorldInverseTranspose);
+    float intensity = dot(normal, LightVector);
+    output.color = saturate(LightColor * LightPower * intensity);
 
     return output;
 }
 
-float4 PixelShaderFunction(float4 c : COLOR0) : COLOR
+float4 PixelShaderFunction(MyVertexOutput input_param) : COLOR0
 {
-    return c;    
+    float4 light = saturate(input_param.color + LightColor * LightPower);
+    return light;  
 }
 
-technique Ambient
+technique DirectionalLight
 {
     pass PO
     {
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader  = compile ps_2_0 PixelShaderFunction();
-        FillMode = wireframe;
+        //FillMode = wireframe;
     }
 }
+
+

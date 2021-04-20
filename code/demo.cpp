@@ -12,6 +12,12 @@ Matrix mat_world;
 Font* font = NULL;
 Camera* camera = NULL;
 Effect* effect = NULL;
+
+Vector3 light_vector;
+Color light_color;
+float light_angle = 0;
+float light_power = 0.1f;
+float object_angle = 0;
 float delta = 0;
 
 //these function are not used at this time
@@ -44,12 +50,12 @@ bool game_init(HWND hwnd)
         debug << "Error creating font" << endl;
         return false;
     }
-
-    g_engine->set_backdrop_color(D3DCOLOR_XRGB(0, 30, 30));
+    Color back_color(0, 0, 30, 255);
+    g_engine->set_backdrop_color(back_color);
 
     //create a camera
     camera = new Camera();
-    camera->set_position(0.0, 0.0, 10.0);
+    camera->set_position(0.0, 0.0, 5.0);
     camera->set_target(0.0, 0.0, 0.0);
 
     //load the ambient.fx effect
@@ -61,6 +67,8 @@ bool game_init(HWND hwnd)
     }
 
     mat_world.set_identity();
+
+    light_color.set(255, 0, 0, 0);
 
     //crate stock meshes
     D3DXCreateTorus(g_engine->get_device(), 2.0f, 4.0f, 20, 20, &torus, NULL);
@@ -74,24 +82,45 @@ bool game_init(HWND hwnd)
 
 void game_render3d()
 {
-    effect->set_technique("Ambient");
+    effect->set_technique("DirectionalLight");
     effect->set_view_matrix(camera->get_view_matrix(), "View");
     effect->set_projection_matrix(camera->get_proj_matrix(), "Projection");
 
     //draw the cube
     {
-        static float rot = 0;
-        rot += 0.01f;
-        mat_world.rotate_x(rot);
+        mat_world.rotate_x(object_angle);
         effect->begin();
         effect->set_world_matrix((D3DXMATRIX)mat_world, "World");
+
+        //calculate combined inverse transpose matrix
+        D3DXMATRIX inverse, wit;
+        D3DXMatrixInverse(&inverse, 0, &mat_world);
+        D3DXMatrixTranspose(&wit, &inverse);
+        effect->set_param("WorldInverseTranspose", wit);
+
+        //move the light source
+        light_vector.x = cosf(light_angle) * 10.0f;
+        light_vector.y = 0.0f;
+        light_vector.z = sinf(light_angle) * 10.0f;
+        effect->set_param("LightVector", light_vector);
+
+        //set the light intensity
+        light_power = Math::limit(light_power, 0.0, 1.0);
+        effect->set_param("LightPower", light_power);
+
+        //set the light color
+        light_color.r = Math::wrap_value(light_color.r, 0.0, 1.0);
+        light_color.g = Math::wrap_value(light_color.g, 0.0, 1.0);
+        light_color.b = Math::wrap_value(light_color.b, 0.0, 1.0);
+        light_color.a = Math::wrap_value(light_color.a, 0.0, 1.0);
+        effect->set_param("LightColor", light_color.to_d3d_vec4());
 
         //choose which mesh to render here
         //torus->DrawSubset(0);
         //cube->DrawSubset(0);
         //sphere->DrawSubset(0);
-        //teapot->DrawSubset(0);
-        cylinder->DrawSubset(0);
+        teapot->DrawSubset(0);
+        //cylinder->DrawSubset(0);
         effect->end();
     }
 }
@@ -118,7 +147,8 @@ void game_render2d()
     out << "Update = " << g_engine->get_core_frame_rate() << "fps" << endl;
     out << "Draw = " << g_engine->get_screen_frame_rate() << "fps";
 
-    font->print(0, 0, out.str());
+    Color font_color(255, 255, 0, 255);
+    font->print(0, 0, out.str(), font_color);
 }
 
 void game_event(IEvent* e)

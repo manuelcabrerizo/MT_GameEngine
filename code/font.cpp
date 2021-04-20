@@ -30,16 +30,16 @@ namespace Octane
         font_obj->Release();
     }
 
-    void Font::print(int x, int y, std::string text, D3DCOLOR color)
+    void Font::print(int x, int y, std::string text,  Color color)
     {
         //figure out the text boundary
         RECT rect = {x, y, 0, 0};
         font_obj->DrawText(NULL, text.c_str(), text.length(),
-                &rect, DT_CALCRECT, color);
+                &rect, DT_CALCRECT, color.to_d3d_color());
 
         //print the text
         font_obj->DrawText(g_engine->get_sprite_obj(), text.c_str(),
-                text.length(), &rect, DT_LEFT, color);
+                text.length(), &rect, DT_LEFT, color.to_d3d_color());
     }
 
     int Font::get_text_width(string text)

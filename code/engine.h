@@ -36,6 +36,7 @@
 #include "math.h"
 #include "camera.h"
 #include "effect.h"
+#include "color.h"
 
 
 //required libraries
@@ -155,7 +156,7 @@ namespace Octane
         void set_full_screen(bool value) {p_fullscreen = value;}
 
         D3DCOLOR get_backdrop_color() {return p_backdrop_color;}
-        void set_backdrop_color(D3DCOLOR value) {p_backdrop_color = value;}
+        void set_backdrop_color(Color value) {p_backdrop_color = value.to_d3d_color();}
 
         //command line params
         std::string get_command_line_params() {return p_command_line_params;}
