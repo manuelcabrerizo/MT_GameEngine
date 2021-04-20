@@ -3,6 +3,9 @@
 #include "engine.h"
 #include "vector.h"
 
+namespace Octane
+{
+
 struct Matrix : public D3DXMATRIX
 {
 public:
@@ -25,4 +28,6 @@ public:
     void rotate_z(float angle);
     void scale(float x, float y, float z);
     void scale(Vector3& v);
+};
+
 };

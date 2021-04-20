@@ -31,6 +31,12 @@
 #include "event.h"
 #include "font.h"
 #include "logfile.h"
+#include "vector.h"
+#include "matrix.h"
+#include "math.h"
+#include "camera.h"
+#include "effect.h"
+
 
 //required libraries
 #pragma comment(lib,"d3d9.lib")

@@ -1,4 +1,7 @@
-#include "matrix.h"
+#include "engine.h"
+
+namespace Octane
+{
 
 Matrix::Matrix()
     : D3DXMATRIX()
@@ -109,3 +112,5 @@ void Matrix::scale(Vector3& v)
 {
     scale((float)v.get_x(), (float)v.get_y(), (float)v.get_z());
 }
+
+};

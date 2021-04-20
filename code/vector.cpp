@@ -1,8 +1,10 @@
-#include "vector.h"
+#include "engine.h"
 
 /**
 VECTOR 2
 **/
+namespace Octane
+{
 
 Vector2::Vector2()
 {
@@ -237,3 +239,5 @@ D3DXVECTOR2 Vector3::to_d3d_vector2()
 {
     return D3DXVECTOR2((float)x, (float)y);
 }
+
+};

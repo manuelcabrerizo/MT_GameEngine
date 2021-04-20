@@ -1,5 +1,5 @@
 #include "engine.h"
-#include "math.h"
+
 namespace Octane
 {
     double Math::to_degrees(double radian)
