@@ -9,11 +9,11 @@ Creating Direct3D device
 Hardware vertex processing
 Creating 2D renderer
 Init input system
-Calling game_init(00000000002502FC)
+Calling game_init(000000000010027C)
 Engine init succeeded
-Core timer started: 3.40579e+08
+Core timer started: 4.19778e+08
 Entering while loop
 Exiting while loop
-Total run time: 3.40598e+08
+Total run time: 4.19783e+08
 Freeing game resources
 Shutting down engine

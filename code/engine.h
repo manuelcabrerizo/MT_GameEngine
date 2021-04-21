@@ -37,6 +37,7 @@
 #include "camera.h"
 #include "effect.h"
 #include "color.h"
+#include "mesh.h"
 
 
 //required libraries
